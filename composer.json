@@ -1,0 +1,25 @@
+{
+  "name": "geckon01/simple-image-compressor",
+  "description": "SimpleImageCompressor is a tiny simple PHP image compressor lib which allows you to compress any image easily on the fly",
+  "version": "0.3.1",
+  "keywords": [
+    "php",
+    "images",
+    "compress",
+    "png",
+    "jpeg",
+    "gif"
+  ],
+  "require": {
+    "php": ">=7.4",
+    "ext-gd": "*"
+  },
+  "homepage": "https://github.com/Geckon01/simple-image-compressor",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "geckon01\\SimpleImageCompressor\\": "src/"
+    }
+  },
+  "require-dev": {}
+}
