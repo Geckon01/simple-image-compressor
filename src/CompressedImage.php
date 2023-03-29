@@ -57,7 +57,7 @@ class CompressedImage
                 imagejpeg($this->imageObject, null, $this->qualityRate);
                 break;
             case "image/png":
-                imagepng(   $this->imageObject, null, self::mapValue($this->qualityRate, 0, 100, 0, 9));
+                imagepng($this->imageObject, null, self::mapValue($this->qualityRate, 0, 100, 0, 9));
                 break;
             case "image/gif":
                 imagegif($this->imageObject);
@@ -81,7 +81,7 @@ class CompressedImage
                 imagejpeg($this->imageObject, $filePath.".jpg", $this->qualityRate);
                 break;
             case "image/png":
-                imagepng(   $this->imageObject, $filePath.".png", self::mapValue($this->qualityRate, 0, 100, 0, 9));
+                imagepng($this->imageObject, $filePath.".png", self::mapValue($this->qualityRate, 0, 100, 0, 9));
                 break;
             case "image/gif":
                 imagegif($this->imageObject, $filePath.".gif");

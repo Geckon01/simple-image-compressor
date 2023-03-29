@@ -8,6 +8,8 @@
 
 namespace geckon01\SimpleImageCompressor;
 
+use http\Exception\BadUrlException;
+
 /**
  * Class SimpleImageCompressor
  * @package geckon01\SimpleImageCompressor
@@ -22,6 +24,7 @@ class SimpleImageCompressor
     private int $approxMinimumHeight = 90;
     private int $approxMinimumWidth = 90;
 
+
     /**
      * SimpleImageCompressor constructor.
      * @param $url
@@ -30,6 +33,7 @@ class SimpleImageCompressor
     {
         $this->imageResourceUrl = $url;
     }
+
 
     /**
      * Returns current loaded image type
@@ -82,9 +86,9 @@ class SimpleImageCompressor
 
         if (substr($this->imageData, 0, 2) === "\xFF\xD8") {
             $filetype = 'image/jpeg';
-        } elseif (substr($this->imageData, 0, 3) === "\x89\x50\x4E") {
+        } else if (substr($this->imageData, 0, 3) === "\x89\x50\x4E") {
             $filetype = 'image/png';
-        } elseif (substr($this->imageData, 0, 4) === "\x47\x49\x46\x38") {
+        } else if (substr($this->imageData, 0, 4) === "\x47\x49\x46\x38") {
             $filetype = 'image/gif';
         }
 
@@ -96,38 +100,46 @@ class SimpleImageCompressor
      */
     private function readImageToString(): void {
         $imageData = file_get_contents($this->imageResourceUrl);
+
+        if($imageData === false)
+            throw new BadUrlException("Cannot load image from provided resource: ".$this->imageResourceUrl);
+
         $this->imageData = $imageData;
     }
 
     /**
      * Resizes and compressing image.
      * Note that gif compression not supported
-     * @param int $resolutionReductionPercent percent shows how much image resolution to original will be. The greater percent, the lower resolution
+     * @param int $reductionPercent percent shows how much image resolution to original will be. The greater percent, the lower resolution
      * @param int $quality
      * @return CompressedImage
      */
-    public function resizeAndCompress($resolutionReductionPercent = 5, $quality = 90): CompressedImage
+    public function resizeAndCompress($reductionPercent = 5, $quality = 90): CompressedImage
     {
-        $im = imagecreatefromstring($this->imageData);
-        $width = imagesx($im);
-        $height = imagesy($im);
+        $originImage = imagecreatefromstring($this->imageData);
+        
+        if($originImage === false)
+            throw new \Exception("Can not read provided file");
+
+        $width = imagesx($originImage);
+        $height = imagesy($originImage);
 
         $totalPixelCount = $width * $height;
         $minimumPixelCount = $this->approxMinimumWidth * $this->approxMinimumHeight;
-        $maximumResolutionReductionPercent = round(abs(100 - ($minimumPixelCount / $totalPixelCount * 100)));
+        $maxReductionPercent = round(abs(100 - ($minimumPixelCount / $totalPixelCount * 100)));
 
-        //Due to saving proportion we can't guarantee that width and height be equals max and min
-        //As example, if we have original image 1920*1080 which we want to get 50% of original resolution
-        //If we want to save 16*9 aspect ration it must be 960*540
-        //So, we override $maximumResolutionReductionPercent to value which satisfy origin aspect ratio
-        if($maximumResolutionReductionPercent < $resolutionReductionPercent)
-            $resolutionReductionPercent = $maximumResolutionReductionPercent;
+        // Due to saving proportion we can't guarantee that width and height be equals max and min
+        // As example, if we have original image 1920*1080 which we want to get 50% of original resolution
+        // If we want to save 16*9 aspect ration it must be 960*540
+        // So, we override $maxReductionPercent to value which satisfy origin aspect ratio
+        if($maxReductionPercent < $reductionPercent)
+            $reductionPercent = $maxReductionPercent;
 
-        $newWidth = round($width - ($width * $resolutionReductionPercent) / 100);
-        $newHeight = round($height - ($height * $resolutionReductionPercent) / 100);
+        $newWidth = round($width - ($width * $reductionPercent) / 100);
+        $newHeight = round($height - ($height * $reductionPercent) / 100);
 
         $thumb = imagecreatetruecolor($newWidth, $newHeight);
-        imagecopyresized($thumb, $im, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+        imagecopyresized($thumb, $originImage, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
 
         return new CompressedImage($quality, $this->imageType,$thumb);
     }
