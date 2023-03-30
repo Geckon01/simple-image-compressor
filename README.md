@@ -8,7 +8,7 @@
 ![Downloads](https://img.shields.io/packagist/dt/geckon01/simple-image-compressor)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/d773335a657d467faaa0ebb12bc2abe1)](https://app.codacy.com/gh/Geckon01/simple-image-compressor/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
-**SimpleImageCompressor** - is a tiny simple PHP image compressor lib which allows you to compress any image easily on the fly.
+**SimpleImageCompressor** - is a tiny simple PHP image resizer/compressor lib which allows you to resize and compress any image easily on the fly.
 
 ## Installation
 
