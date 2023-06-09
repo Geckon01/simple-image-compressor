@@ -33,10 +33,10 @@ use geckon01\SimpleImageCompressor\SimpleImageCompressor;
 
 To resize and compress your image you can use next code:
 ```php
-$resulutionTargetPercent = 50;
+$resolutionTargetPercent = 50;
 $targetQuality = 50;
 $compressor = SimpleImageCompressor::load("image.png");
-$compressedImage = $compressor->resizeAndCompress($resulutionTargetPercent, $targetQuality);
+$compressedImage = $compressor->resizeAndCompress($resolutionTargetPercent, $targetQuality);
 $compressedImage->toFile("image");
 ```
 load method supports loading from local file, or you can specify any valid URL image link like this:
