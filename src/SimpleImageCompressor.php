@@ -24,14 +24,17 @@ class SimpleImageCompressor
     private int $approxMinimumHeight = 90;
     private int $approxMinimumWidth = 90;
 
+    private bool $exifLoaded = false;
+
 
     /**
      * SimpleImageCompressor constructor.
-     * @param $url
+     * @param $url url or path from where to load file
      */
     private function __construct($url)
     {
         $this->imageResourceUrl = $url;
+        $this->exifLoaded = in_array("exif", get_loaded_extensions());
     }
 
 
@@ -82,17 +85,46 @@ class SimpleImageCompressor
      * Determine current loaded image type
      */
     private function loadImageType() {
-        $filetype = '';
+        $this->imageType = "image";
+
+        if($this->exifLoaded)
+        {
+            switch (exif_imagetype($this->imageResourceUrl)) 
+            {
+                case IMAGETYPE_GIF:
+                    $this->imageType = 'image/gif';
+                    break;
+                case IMAGETYPE_JPEG:
+                    $this->imageType = 'image/jpeg';
+                    break;
+                case IMAGETYPE_PNG:
+                    $this->imageType = 'image/png';
+                    break;
+                case IMAGETYPE_BMP:
+                    $this->imageType = 'image/bmp';
+                    break;
+                case IMAGETYPE_WEBP:
+                    $this->imageType = 'image/webp';
+                    break;
+                case IMAGETYPE_ICO:
+                    $this->imageType = 'image/ico';
+                    break;
+                default:
+                    break;
+            }
+            return;
+        } 
+
+        //Fallback to bytes recognition
+        trigger_error("simple-image-compressor: Exif extension not found. Image MIME type recognition may be inaccurate.");
 
         if (substr($this->imageData, 0, 2) === "\xFF\xD8") {
-            $filetype = 'image/jpeg';
+            $this->imageType = 'image/jpeg';
         } else if (substr($this->imageData, 0, 3) === "\x89\x50\x4E") {
-            $filetype = 'image/png';
+            $this->imageType = 'image/png';
         } else if (substr($this->imageData, 0, 4) === "\x47\x49\x46\x38") {
-            $filetype = 'image/gif';
+            $this->imageType = 'image/gif';
         }
-
-        $this->imageType = $filetype;
     }
 
     /**
