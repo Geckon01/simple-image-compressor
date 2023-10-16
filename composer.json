@@ -1,7 +1,7 @@
 {
   "name": "geckon01/simple-image-compressor",
   "description": "SimpleImageCompressor is a tiny simple PHP image compressor lib which allows you to compress any image easily on the fly",
-  "version": "0.3.1",
+  "version": "0.3.10",
   "keywords": [
     "php",
     "images",
