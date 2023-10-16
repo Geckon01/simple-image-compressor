@@ -62,6 +62,12 @@ class CompressedImage
             case "image/gif":
                 imagegif($this->imageObject);
                 break;
+            case "image/webp":
+                imagewebp($this->imageObject);
+                break;
+            case "image/bmp":
+                imagebmp($this->imageObject);
+                break;
         }
         $base64_output = ob_get_contents();
         ob_end_clean();
@@ -85,6 +91,12 @@ class CompressedImage
                 break;
             case "image/gif":
                 imagegif($this->imageObject, $filePath.".gif");
+                break;
+            case "image/webp":
+                imagewebp($this->imageObject, $filePath.".webp");
+                break;
+            case "image/bmp":
+                imagebmp($this->imageObject, $filePath.".bmp");
                 break;
         }
     }

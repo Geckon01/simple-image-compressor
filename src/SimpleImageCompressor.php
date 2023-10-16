@@ -16,7 +16,7 @@ use http\Exception\BadUrlException;
  */
 class SimpleImageCompressor
 {
-    private const ALLOWED_IMAGE_FORMAT = "image/jpeg,image/png,image/gif";
+    private const ALLOWED_IMAGE_FORMAT = "image/jpeg,image/png,image/gif,image/webp,image/bmp";
     private string $imageResourceUrl;
     private string $imageData;
     private string $imageType;
