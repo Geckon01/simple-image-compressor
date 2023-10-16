@@ -87,9 +87,8 @@ class SimpleImageCompressor
     private function loadImageType() {
         $this->imageType = "image";
 
-        if($this->exifLoaded)
-        {
-            switch (exif_imagetype($this->imageResourceUrl)) 
+        if($this->exifLoaded) {
+            switch (exif_imagetype($this->imageResourceUrl))
             {
                 case IMAGETYPE_GIF:
                     $this->imageType = 'image/gif';
@@ -115,14 +114,16 @@ class SimpleImageCompressor
             return;
         } 
 
-        //Fallback to bytes recognition
+        // Fallback to bytes recognition
         trigger_error("simple-image-compressor: Exif extension not found. Image MIME type recognition may be inaccurate.");
 
         if (substr($this->imageData, 0, 2) === "\xFF\xD8") {
             $this->imageType = 'image/jpeg';
-        } else if (substr($this->imageData, 0, 3) === "\x89\x50\x4E") {
+        }
+        if (substr($this->imageData, 0, 3) === "\x89\x50\x4E") {
             $this->imageType = 'image/png';
-        } else if (substr($this->imageData, 0, 4) === "\x47\x49\x46\x38") {
+        }
+        if (substr($this->imageData, 0, 4) === "\x47\x49\x46\x38") {
             $this->imageType = 'image/gif';
         }
     }
