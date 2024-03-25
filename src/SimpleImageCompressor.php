@@ -8,7 +8,6 @@
 
 namespace geckon01\SimpleImageCompressor;
 
-use http\Exception\BadUrlException;
 
 /**
  * Class SimpleImageCompressor
@@ -135,7 +134,7 @@ class SimpleImageCompressor
         $imageData = file_get_contents($this->imageResourceUrl);
 
         if($imageData === false)
-            throw new BadUrlException("Cannot load image from provided resource: ".$this->imageResourceUrl);
+            throw new \Exception("Cannot load image from provided resource: ".$this->imageResourceUrl);
 
         $this->imageData = $imageData;
     }
@@ -150,7 +149,7 @@ class SimpleImageCompressor
     public function resizeAndCompress($reductionPercent = 5, $quality = 90): CompressedImage
     {
         $originImage = imagecreatefromstring($this->imageData);
-        
+
         if($originImage === false)
             throw new \Exception("Can not read provided file");
 
