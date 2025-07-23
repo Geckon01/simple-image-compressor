@@ -19,9 +19,9 @@ composer require "geckon01/simple-image-compressor"
 
 ### Without composer
 
- 1.  Download latest release [here](https://github.com/Geckon01/simple-image-compressor/releases).
- 2. Unpack archive to any folder of your project you wish.
- 3. Load main lib files:
+ 1. Download latest release [here](https://github.com/Geckon01/simple-image-compressor/releases).
+ 2. Unpack the archive to your project directory.
+ 3. Include the library files:
 
 ```php
 require "src/SimpleImageCompressor.php";  
@@ -31,7 +31,7 @@ use geckon01\SimpleImageCompressor\SimpleImageCompressor;
 
 ## Usage
 
-To resize and compress your image you can use next code:
+Resize and compress an image:
 ```php
 $resolutionTargetPercent = 50;
 $targetQuality = 50;
@@ -43,14 +43,13 @@ load method supports loading from local file, or you can specify any valid URL i
 ```php
 $compressor = SimpleImageCompressor::load("https://example.com/image.jpg");
 ```
-This lib support chaining, so you can do something like this:
+Method chaining is supported:
 ```php
 SimpleImageCompressor::load("image.png")
 	->resizeAndCompress(50, 50)
 	->toFile("image");
 ```
-> Note that you don't need to specify file extension. The lib will save
-> file with proper one automatically. 
+> Note: File extensions are automatically added. Use toFile("filename") without extension.
 
 ### Output format
 You can specify output format. Supported output fomats are:
@@ -64,14 +63,14 @@ $compressedImage->toBase64();
 ```php 
 $compressedImage->toGdImage();
 ```
-### Max/min height/width
-Also you can set approximate minumum and maximum image size. 
+### Size Constraints
+Set approximate minimum dimensions (aspect ratio preserved): 
 ```php 
 $compressor->setApproxMinimumHeight(500);  
 $compressor->setApproxMinimumWidth(500);
 ```
-> Note that Due to saving proportion lib can't guarantee that width and height be equals max and min . 
-As example, if we have original image 1920x1080 which we want to get 50% of original resolution  and save original 16x9 aspect ration the reduced image must be 960x540.
+> Note actual dimensions may differ due to aspect ratio preservation.
+Example: 1920×1080 image reduced to 50% becomes 960×540 (maintaining 16:9).
 
 ## License
 
